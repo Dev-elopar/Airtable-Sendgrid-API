@@ -4,30 +4,28 @@ const sendEmailRoute = express.Router();
 const cron = require('node-cron');
 
 sendEmailRoute.get('/', (req, res) => {
-    // res.send('Hello World!');
     // cron job to send email at 4:45 pm every day
-    cron.schedule('40 10 * * *', () => {
-        console.log('running a task every minutesssss');
+    cron.schedule('45 16 * * *', () => {
+        console.log('running a task every minutess');
         res.send('Hello World!');
     }, {});
-    // test cron to run every 1 second
+    // test cron 
 
 });
 
-cron.schedule('*/1 * * * * *', () => {
+cron.schedule('45 16 * * * *', () => {
     try {
         console.log('running a task every minuteee');
         var Airtable = require('airtable');
         var base = new Airtable({ apiKey: process.env.AIRTABLE_APIKEY }).base(process.env.AIRTABLE_BASE);
 
         const today = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' }); // get today's date in 'DD/MM/YY' format
-        // const filterformula = `DATETIME_FORMAT(Date, 'DD/MM/YY') = '${today}'`; // create the filter formula to match today's date
-        // console.log(filterformula);
+        
         console.log(today);
         const recordsToSend = []; // create an empty array to store the records that match the filter formula
 
         base('visit days').select({
-            // Selecting the first 3 records in Grid view:
+            // Selecting the day's records in Grid view:
             maxRecords: 1,
             filterByFormula: `DATETIME_DIFF(DATETIME_PARSE(Date, 'DD/MM/YYYY'), NOW(), 'days') = 0`,
             view: "report1",
